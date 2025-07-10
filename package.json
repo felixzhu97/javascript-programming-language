@@ -1,0 +1,40 @@
+{
+  "name": "javascript-advanced-programming-examples",
+  "version": "1.0.0",
+  "description": "《JavaScript高级程序设计》完整案例集合",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "serve": "http-server -p 8080 -c-1",
+    "build": "webpack --mode production",
+    "dev-server": "webpack serve --mode development"
+  },
+  "keywords": [
+    "javascript",
+    "advanced",
+    "programming",
+    "examples",
+    "tutorial"
+  ],
+  "author": "JavaScript Advanced Programming Examples",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "http-server": "^14.1.1",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "babel-loader": "^9.1.3"
+  }
+}

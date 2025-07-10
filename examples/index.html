@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript高级程序设计 - 完整案例演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .demo-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .demo-content {
+            margin-bottom: 15px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .output {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .highlight {
+            background: #ffeaa7;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .nav-menu {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .nav-menu button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            margin: 5px;
+        }
+
+        .nav-menu button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-menu button.active {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .demo-section {
+            display: none;
+        }
+
+        .demo-section.active {
+            display: block;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: white;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript高级程序设计</h1>
+            <p class="subtitle">完整案例演示与实践</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </header>
+
+        <nav class="nav-menu">
+            <button onclick="showSection('variables')" class="active">变量与类型</button>
+            <button onclick="showSection('functions')">函数与闭包</button>
+            <button onclick="showSection('objects')">对象与原型</button>
+            <button onclick="showSection('async')">异步编程</button>
+            <button onclick="showSection('dom')">DOM操作</button>
+            <button onclick="showSection('advanced')">高级特性</button>
+        </nav>
+
+        <!-- 变量与类型 -->
+        <div id="variables" class="demo-section active">
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🔢 数据类型检测</h3>
+                    <div class="demo-content">
+                        <p>演示JavaScript中的数据类型检测方法</p>
+                        <div class="code-block">
+                            function getType(value) {
+                            return Object.prototype.toString.call(value).slice(8, -1);
+                            }
+
+                            console.log(getType(123)); // Number
+                            console.log(getType("hello")); // String
+                            console.log(getType([])); // Array
+                        </div>
+                    </div>
+                    <button onclick="testDataTypes()">测试数据类型</button>
+                    <div class="output" id="dataTypesOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🔄 类型转换</h3>
+                    <div class="demo-content">
+                        <p>演示显式和隐式类型转换</p>
+                        <div class="code-block">
+                            // 隐式转换
+                            console.log("5" + 3); // "53"
+                            console.log("5" - 3); // 2
+                            console.log(true + 1); // 2
+
+                            // 显式转换
+                            console.log(Number("123")); // 123
+                            console.log(String(123)); // "123"
+                        </div>
+                    </div>
+                    <button onclick="testTypeConversion()">测试类型转换</button>
+                    <div class="output" id="typeConversionOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🎯 作用域演示</h3>
+                    <div class="demo-content">
+                        <p>演示var、let、const的作用域差异</p>
+                        <div class="code-block">
+                            function scopeTest() {
+                            var varVariable = "var";
+                            let letVariable = "let";
+                            const constVariable = "const";
+
+                            if (true) {
+                            var varInBlock = "var in block";
+                            let letInBlock = "let in block";
+                            }
+
+                            console.log(varInBlock); // 可访问
+                            // console.log(letInBlock); // 错误
+                            }
+                        </div>
+                    </div>
+                    <button onclick="testScope()">测试作用域</button>
+                    <div class="output" id="scopeOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>⚡ 变量提升</h3>
+                    <div class="demo-content">
+                        <p>演示变量提升和函数提升</p>
+                        <div class="code-block">
+                            console.log(hoistedVar); // undefined
+                            var hoistedVar = "提升的变量";
+
+                            console.log(hoistedFunction()); // 可以调用
+                            function hoistedFunction() {
+                            return "提升的函数";
+                            }
+                        </div>
+                    </div>
+                    <button onclick="testHoisting()">测试变量提升</button>
+                    <div class="output" id="hoistingOutput"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 函数与闭包 -->
+        <div id="functions" class="demo-section">
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🔒 闭包演示</h3>
+                    <div class="demo-content">
+                        <p>演示闭包的创建和使用</p>
+                        <div class="code-block">
+                            function createCounter() {
+                            let count = 0;
+                            return {
+                            increment: () => ++count,
+                            decrement: () => --count,
+                            getCount: () => count
+                            };
+                            }
+
+                            const counter = createCounter();
+                        </div>
+                    </div>
+                    <button onclick="testClosure()">测试闭包</button>
+                    <div class="output" id="closureOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🏹 箭头函数</h3>
+                    <div class="demo-content">
+                        <p>演示箭头函数与普通函数的区别</p>
+                        <div class="code-block">
+                            const obj = {
+                            name: "Test",
+                            traditional: function() {
+                            return this.name;
+                            },
+                            arrow: () => {
+                            return this.name; // undefined
+                            }
+                            };
+                        </div>
+                    </div>
+                    <button onclick="testArrowFunction()">测试箭头函数</button>
+                    <div class="output" id="arrowFunctionOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🔄 高阶函数</h3>
+                    <div class="demo-content">
+                        <p>演示高阶函数的使用</p>
+                        <div class="code-block">
+                            const numbers = [1, 2, 3, 4, 5];
+
+                            const doubled = numbers.map(x => x * 2);
+                            const evens = numbers.filter(x => x % 2 === 0);
+                            const sum = numbers.reduce((acc, x) => acc + x, 0);
+                        </div>
+                    </div>
+                    <button onclick="testHigherOrderFunctions()">测试高阶函数</button>
+                    <div class="output" id="higherOrderOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🎭 函数柯里化</h3>
+                    <div class="demo-content">
+                        <p>演示函数柯里化技术</p>
+                        <div class="code-block">
+                            function curry(fn) {
+                            return function curried(...args) {
+                            if (args.length >= fn.length) {
+                            return fn.apply(this, args);
+                            }
+                            return (...nextArgs) => curried(...args, ...nextArgs);
+                            };
+                            }
+                        </div>
+                    </div>
+                    <button onclick="testCurrying()">测试柯里化</button>
+                    <div class="output" id="curryingOutput"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 对象与原型 -->
+        <div id="objects" class="demo-section">
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🏗️ 对象创建</h3>
+                    <div class="demo-content">
+                        <p>演示多种对象创建方式</p>
+                        <div class="code-block">
+                            // 字面量
+                            const literal = { name: "Alice" };
+
+                            // 构造函数
+                            function Person(name) { this.name = name; }
+                            const person = new Person("Bob");
+
+                            // Object.create
+                            const proto = Object.create(Person.prototype);
+                        </div>
+                    </div>
+                    <button onclick="testObjectCreation()">测试对象创建</button>
+                    <div class="output" id="objectCreationOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>⛓️ 原型链</h3>
+                    <div class="demo-content">
+                        <p>演示原型链的工作原理</p>
+                        <div class="code-block">
+                            function Animal(name) {
+                            this.name = name;
+                            }
+                            Animal.prototype.speak = function() {
+                            return `${this.name} makes a sound`;
+                            };
+
+                            function Dog(name) {
+                            Animal.call(this, name);
+                            }
+                            Dog.prototype = Object.create(Animal.prototype);
+                        </div>
+                    </div>
+                    <button onclick="testPrototypeChain()">测试原型链</button>
+                    <div class="output" id="prototypeChainOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🔍 属性描述符</h3>
+                    <div class="demo-content">
+                        <p>演示属性描述符的使用</p>
+                        <div class="code-block">
+                            const obj = {};
+                            Object.defineProperty(obj, 'name', {
+                            value: 'Test',
+                            writable: false,
+                            enumerable: true,
+                            configurable: true
+                            });
+                        </div>
+                    </div>
+                    <button onclick="testPropertyDescriptor()">测试属性描述符</button>
+                    <div class="output" id="propertyDescriptorOutput"></div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🔄 对象操作</h3>
+                    <div class="demo-content">
+                        <p>演示对象的各种操作方法</p>
+                        <div class="code-block">
+                            const obj = { a: 1, b: 2, c: 3 };
+
+                            // 遍历
+                            Object.keys(obj);
+                            Object.values(obj);
+                            Object.entries(obj);
+
+                            // 合并
+                            const merged = { ...obj, d: 4 };
+                        </div>
+                    </div>
+                    <button onclick="testObjectOperations()">测试对象操作</button>
+                    <div class="output" id="objectOperationsOutput"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 其他部分暂时简化 -->
+        <div id="async" class="demo-section">
+            <div class="demo-card">
+                <h3>🔄 异步编程</h3>
+                <p>Promise、async/await等异步编程概念的演示</p>
+                <button onclick="alert('异步编程演示正在开发中...')">开发中</button>
+            </div>
+        </div>
+
+        <div id="dom" class="demo-section">
+            <div class="demo-card">
+                <h3>🌐 DOM操作</h3>
+                <p>DOM操作和事件处理的演示</p>
+                <button onclick="alert('DOM操作演示正在开发中...')">开发中</button>
+            </div>
+        </div>
+
+        <div id="advanced" class="demo-section">
+            <div class="demo-card">
+                <h3>⚡ 高级特性</h3>
+                <p>ES6+特性、模块化、性能优化等高级概念</p>
+                <button onclick="alert('高级特性演示正在开发中...')">开发中</button>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2024 JavaScript高级程序设计完整案例集合</p>
+            <p>包含书中所有重要概念的实践示例</p>
+        </footer>
+    </div>
+
+    <script>
+        // 导航功能
+        function showSection(sectionId) {
+            // 隐藏所有部分
+            document.querySelectorAll('.demo-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // 显示选中的部分
+            document.getElementById(sectionId).classList.add('active');
+
+            // 更新按钮状态
+            document.querySelectorAll('.nav-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 更新进度条
+            updateProgress(sectionId);
+        }
+
+        function updateProgress(sectionId) {
+            const sections = ['variables', 'functions', 'objects', 'async', 'dom', 'advanced'];
+            const currentIndex = sections.indexOf(sectionId);
+            const progress = ((currentIndex + 1) / sections.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // 数据类型测试
+        function testDataTypes() {
+            const output = document.getElementById('dataTypesOutput');
+            const testValues = [
+                123, "hello", true, null, undefined,
+                [], {}, function () { }, new Date(), /regex/
+            ];
+
+            function getType(value) {
+                return Object.prototype.toString.call(value).slice(8, -1);
+            }
+
+            let result = '数据类型检测结果:\n';
+            testValues.forEach(value => {
+                result += `值: ${value} -> 类型: ${getType(value)}\n`;
+            });
+
+            output.textContent = result;
+        }
+
+        // 类型转换测试
+        function testTypeConversion() {
+            const output = document.getElementById('typeConversionOutput');
+            let result = '类型转换测试:\n\n';
+
+            result += '隐式转换:\n';
+            result += '"5" + 3 = ' + ("5" + 3) + '\n';
+            result += '"5" - 3 = ' + ("5" - 3) + '\n';
+            result += 'true + 1 = ' + (true + 1) + '\n';
+            result += 'false + 1 = ' + (false + 1) + '\n\n';
+
+            result += '显式转换:\n';
+            result += 'Number("123") = ' + Number("123") + '\n';
+            result += 'String(123) = ' + String(123) + '\n';
+            result += 'Boolean(0) = ' + Boolean(0) + '\n';
+            result += 'Boolean("hello") = ' + Boolean("hello") + '\n';
+
+            output.textContent = result;
+        }
+
+        // 作用域测试
+        function testScope() {
+            const output = document.getElementById('scopeOutput');
+            let result = '作用域测试:\n\n';
+
+            function scopeTest() {
+                var varVariable = "var变量";
+                let letVariable = "let变量";
+                const constVariable = "const变量";
+
+                if (true) {
+                    var varInBlock = "var在块中";
+                    let letInBlock = "let在块中";
+                    const constInBlock = "const在块中";
+                }
+
+                result += '函数作用域:\n';
+                result += 'varVariable: ' + varVariable + '\n';
+                result += 'letVariable: ' + letVariable + '\n';
+                result += 'constVariable: ' + constVariable + '\n\n';
+
+                result += '块级作用域:\n';
+                result += 'varInBlock: ' + varInBlock + ' (可访问)\n';
+                result += 'letInBlock: 不可访问 (ReferenceError)\n';
+                result += 'constInBlock: 不可访问 (ReferenceError)\n';
+            }
+
+            scopeTest();
+            output.textContent = result;
+        }
+
+        // 变量提升测试
+        function testHoisting() {
+            const output = document.getElementById('hoistingOutput');
+            let result = '变量提升测试:\n\n';
+
+            result += '函数提升:\n';
+            result += 'hoistedFunction() = ' + hoistedFunction() + '\n\n';
+
+            function hoistedFunction() {
+                return '这是被提升的函数';
+            }
+
+            result += 'var提升:\n';
+            result += 'typeof hoistedVar = ' + typeof hoistedVar + ' (在声明前)\n';
+            var hoistedVar = '被提升的变量';
+            result += 'hoistedVar = ' + hoistedVar + ' (声明后)\n';
+
+            output.textContent = result;
+        }
+
+        // 闭包测试
+        function testClosure() {
+            const output = document.getElementById('closureOutput');
+            let result = '闭包测试:\n\n';
+
+            function createCounter() {
+                let count = 0;
+                return {
+                    increment: () => ++count,
+                    decrement: () => --count,
+                    getCount: () => count
+                };
+            }
+
+            const counter1 = createCounter();
+            const counter2 = createCounter();
+
+            result += '创建两个独立的计数器:\n';
+            result += 'counter1.increment(): ' + counter1.increment() + '\n';
+            result += 'counter1.increment(): ' + counter1.increment() + '\n';
+            result += 'counter2.increment(): ' + counter2.increment() + '\n';
+            result += 'counter1.getCount(): ' + counter1.getCount() + '\n';
+            result += 'counter2.getCount(): ' + counter2.getCount() + '\n';
+            result += '\n每个闭包都有自己的作用域';
+
+            output.textContent = result;
+        }
+
+        // 箭头函数测试
+        function testArrowFunction() {
+            const output = document.getElementById('arrowFunctionOutput');
+            let result = '箭头函数测试:\n\n';
+
+            const obj = {
+                name: "测试对象",
+                traditional: function () {
+                    return `传统函数: ${this.name}`;
+                },
+                arrow: () => {
+                    return `箭头函数: ${this.name || 'undefined'}`;
+                }
+            };
+
+            result += obj.traditional() + '\n';
+            result += obj.arrow() + '\n\n';
+            result += '箭头函数不绑定this，继承外层作用域的this';
+
+            output.textContent = result;
+        }
+
+        // 高阶函数测试
+        function testHigherOrderFunctions() {
+            const output = document.getElementById('higherOrderOutput');
+            let result = '高阶函数测试:\n\n';
+
+            const numbers = [1, 2, 3, 4, 5];
+
+            result += '原数组: ' + JSON.stringify(numbers) + '\n';
+            result += 'map(x => x * 2): ' + JSON.stringify(numbers.map(x => x * 2)) + '\n';
+            result += 'filter(x => x % 2 === 0): ' + JSON.stringify(numbers.filter(x => x % 2 === 0)) + '\n';
+            result += 'reduce((acc, x) => acc + x, 0): ' + numbers.reduce((acc, x) => acc + x, 0) + '\n';
+
+            output.textContent = result;
+        }
+
+        // 柯里化测试
+        function testCurrying() {
+            const output = document.getElementById('curryingOutput');
+            let result = '函数柯里化测试:\n\n';
+
+            function curry(fn) {
+                return function curried(...args) {
+                    if (args.length >= fn.length) {
+                        return fn.apply(this, args);
+                    }
+                    return (...nextArgs) => curried(...args, ...nextArgs);
+                };
+            }
+
+            function add(a, b, c) {
+                return a + b + c;
+            }
+
+            const curriedAdd = curry(add);
+
+            result += '原函数: add(1, 2, 3) = ' + add(1, 2, 3) + '\n';
+            result += '柯里化: curriedAdd(1)(2)(3) = ' + curriedAdd(1)(2)(3) + '\n';
+            result += '部分应用: curriedAdd(1, 2)(3) = ' + curriedAdd(1, 2)(3) + '\n';
+
+            output.textContent = result;
+        }
+
+        // 对象创建测试
+        function testObjectCreation() {
+            const output = document.getElementById('objectCreationOutput');
+            let result = '对象创建测试:\n\n';
+
+            // 字面量
+            const literal = { name: "Alice", type: "literal" };
+            result += '字面量: ' + JSON.stringify(literal) + '\n';
+
+            // 构造函数
+            function Person(name) {
+                this.name = name;
+                this.type = "constructor";
+            }
+            const person = new Person("Bob");
+            result += '构造函数: ' + JSON.stringify(person) + '\n';
+
+            // Object.create
+            const proto = Object.create(Person.prototype);
+            proto.name = "Charlie";
+            proto.type = "Object.create";
+            result += 'Object.create: ' + JSON.stringify(proto) + '\n';
+
+            // 工厂函数
+            function createPerson(name) {
+                return {
+                    name: name,
+                    type: "factory",
+                    introduce: function () {
+                        return `Hi, I'm ${this.name}`;
+                    }
+                };
+            }
+            const factory = createPerson("David");
+            result += '工厂函数: ' + JSON.stringify(factory) + '\n';
+            result += '工厂函数方法: ' + factory.introduce() + '\n';
+
+            output.textContent = result;
+        }
+
+        // 原型链测试
+        function testPrototypeChain() {
+            const output = document.getElementById('prototypeChainOutput');
+            let result = '原型链测试:\n\n';
+
+            function Animal(name) {
+                this.name = name;
+            }
+            Animal.prototype.speak = function () {
+                return `${this.name} makes a sound`;
+            };
+
+            function Dog(name) {
+                Animal.call(this, name);
+            }
+            Dog.prototype = Object.create(Animal.prototype);
+            Dog.prototype.constructor = Dog;
+            Dog.prototype.bark = function () {
+                return `${this.name} barks: Woof!`;
+            };
+
+            const dog = new Dog("Buddy");
+
+            result += '实例属性: ' + dog.name + '\n';
+            result += '父类方法: ' + dog.speak() + '\n';
+            result += '子类方法: ' + dog.bark() + '\n';
+            result += 'instanceof Dog: ' + (dog instanceof Dog) + '\n';
+            result += 'instanceof Animal: ' + (dog instanceof Animal) + '\n';
+            result += 'instanceof Object: ' + (dog instanceof Object) + '\n';
+
+            output.textContent = result;
+        }
+
+        // 属性描述符测试
+        function testPropertyDescriptor() {
+            const output = document.getElementById('propertyDescriptorOutput');
+            let result = '属性描述符测试:\n\n';
+
+            const obj = {};
+
+            Object.defineProperty(obj, 'name', {
+                value: 'Test',
+                writable: false,
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(obj, 'secret', {
+                value: 'hidden',
+                writable: true,
+                enumerable: false,
+                configurable: true
+            });
+
+            result += '对象: ' + JSON.stringify(obj) + '\n';
+            result += 'Object.keys(): ' + JSON.stringify(Object.keys(obj)) + '\n';
+            result += 'Object.getOwnPropertyNames(): ' + JSON.stringify(Object.getOwnPropertyNames(obj)) + '\n';
+
+            // 尝试修改不可写属性
+            obj.name = 'Changed';
+            result += '尝试修改不可写属性后: ' + obj.name + '\n';
+
+            output.textContent = result;
+        }
+
+        // 对象操作测试
+        function testObjectOperations() {
+            const output = document.getElementById('objectOperationsOutput');
+            let result = '对象操作测试:\n\n';
+
+            const obj = { a: 1, b: 2, c: 3 };
+
+            result += '原对象: ' + JSON.stringify(obj) + '\n';
+            result += 'Object.keys(): ' + JSON.stringify(Object.keys(obj)) + '\n';
+            result += 'Object.values(): ' + JSON.stringify(Object.values(obj)) + '\n';
+            result += 'Object.entries(): ' + JSON.stringify(Object.entries(obj)) + '\n';
+
+            // 对象合并
+            const obj2 = { d: 4, e: 5 };
+            const merged = { ...obj, ...obj2 };
+            result += '合并对象: ' + JSON.stringify(merged) + '\n';
+
+            // 对象解构
+            const { a, b, ...rest } = merged;
+            result += '解构: a=' + a + ', b=' + b + ', rest=' + JSON.stringify(rest) + '\n';
+
+            output.textContent = result;
+        }
+
+        // 初始化进度条
+        updateProgress('variables');
+    </script>
+</body>
+
+</html>
